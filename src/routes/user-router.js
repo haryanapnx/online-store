@@ -1,85 +1,24 @@
 const express = require('express');
-const db = require('../../database/models');
 const userRouter = express.Router();
-// const Op = Sequelize.Op;
+const user_service = require('../service/user_service');
 
+    userRouter.post('/users/register', async function(req, res) {
+        await user_service.create(req.body).then(newUser => {res.json(newUser);})
+    });
 
-userRouter.get('/users', async function(req, res) {
-  try{  
-    let user = await db.user.findAll();
-    res.json(user);
-    res.send(user);
-    } 
-    catch (error) {
-          console.error(error);
-    }
-});
-
-userRouter.put('/users/update/:id', async function(req, res){
-
-       let username = req.body.username;
-       let password = req.body.password;
-       let email = req.body.email;
-       let address = req.body.address;
-       let phone = req.body.phone;
-       let role = req.body.role;        
-       
-    const id = req.params.id;
-    await db.user.find({
-        where: { id: id }
-    })   
-      .then(user => {
-        db.user.update({
-            username: username,
-            password: password,
-            email: email,
-            address: address,
-            phone: phone,
-            role: role
-       })
-      })
-      .then(user => {
-        res.json(user);
-      });
-  });
-
-userRouter.delete('/user/delete/:id', async function(req, res) {
-    const id = req.params.id;
-    await db.user.destroy({
-      where: { id: id }
+    userRouter.get('/users/:id', async function(req, res) {
+        await user_service.read(req.params.id).then(user =>{res.json(user) })
     })
-      .then(deletedUser => {
-        res.json(deletedUser,console.log("User Berhasil dihapus !"));
-      });      
-  });
+    
+    userRouter.get('/users', async function(req, res) {
+        await user_service.read().then(user => {res.json(user) })
+    });
 
-userRouter.post('/user/create', async function(req, res) {
+    userRouter.put('/users/update/:id', async function(req, res){
+        await user_service.update(req.body,req.params.id).then(update => {res.json(update);})
+    });
 
-    let username = req.body.username;
-    let password = req.body.password;
-    let email = req.body.email;
-    let address = req.body.address;
-    let phone = req.body.phone;
-    let role = req.body.role;
-    await db.user.create({
-        username: username,
-        password: password,
-        email: email,
-        address: address,
-        phone: phone,
-        role: role
-    })
-        .then(newUser => {
-        res.json(newUser);
-        })
-});
-
-userRouter.get('/users/:id', async function(req, res) {
-    const id = req.params['id']
-    let user = await db.user.findAll({
-        where: { id: id }
-    })
-    res.send(user)
-})
-
+    userRouter.delete('/users/delete/:id', async function(req, res) {
+        await user_service.delete(req.params.id).then(deleted => {res.json(deleted);});      
+    });
 module.exports = userRouter;
