@@ -16,7 +16,7 @@ module.exports ={
             return Products.findAll();
         } else {
             return Products.findAll({
-                where: { id: parseInt(params) }
+                where: { id: params }
             });  
         }  
     },
