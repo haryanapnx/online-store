@@ -5,7 +5,7 @@ const LocalStrategy = require('passport-local').Strategy;
 module.exports = {
         
     auth(params){
-       return users.find({where:{email:params.email,password:params.passport}})
+       return users.find({where:{username:params.username,password:params.password}})
         .then(aut =>{
             if(aut){
                 console.log('berhasil login');

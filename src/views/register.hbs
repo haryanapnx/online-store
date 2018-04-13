@@ -4,18 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <title>Document</title>
 </head>
 <body>
-    <form id="register" name="register" method="post" action="/user/register">
+    <form >
 
         <label for="username">Username</label>
-        <input name="username" type="text" />
+        <input name="username" type="text" id="username"/><br>
         <label for="password">Password</label>
-        <input name="password" type="password" />
+        <input name="password" type="password" /><br>
         <label for="email">Email</label>
-        <input class="text" name="email" type="email" />       
+        <input class="text" name="email" type="email" /><br>       
         <input class="btn" type="submit" value="Register" />
     </form>
+    <script>
+        $('form').submit(function(e){
+            console.log($(this).serializeArray());
+            e.preventDefault();
+        })
+    </script>
 </body>
 </html>
+<!--id="register" name="register" method="post" action="/users/input"
