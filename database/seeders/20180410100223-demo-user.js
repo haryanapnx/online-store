@@ -14,7 +14,8 @@ module.exports = {
           email: chance.email(),
           address: chance.address(),
           phone: chance.phone(),
-          role: chance.pickone(['user', 'admin'])
+          role: chance.pickone(['user', 'admin']),
+          token: chance.string({length:30})
         }
         users.push(user)
       }
@@ -22,6 +23,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    
+    return queryInterface.bulkDelete('users', null, {});
   }
 };

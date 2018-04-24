@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Tamiya-Bi</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+    /* Remove the navbar's default rounded borders and increase the bottom margin */
+
+    .navbar {
+      margin-bottom: 50px;
+      border-radius: 0;
+    }
+
+    /* Remove the jumbotron's default bottom margin */
+
+    .jumbotron {
+      margin-bottom: 0;
+    }
+
+ 
+
+    footer {
+      background-color: #cacaca;
+      padding: 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="jumbotron">
+    <div class="container text-center">
+      <h1>Tamiya-Bi</h1>
+      <p>Lets get fun with your mini supercar</p>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li class="active">
+            <a href="">Home</a>
+          </li>
+          <li>
+            <a href="http://localhost:9999/products">Products</a>
+          </li>
+          <li>
+            <a href="">Contact</a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li >
+            <a href="" class="dropdown-toggle open" data-toggle="dropdown" aria-expanded="false  "> 
+              <span class="glyphicon glyphicon-shopping-cart"></span> Cart
+              <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                  <li>
+                      <div class="table-responsive">          
+                          <table class="table table-hover">
+                            <thead >
+                              <tr class="info">
+                                <th>#</th>
+                                <th>Nama</th>
+                                <th>Price</th>
+                                <th>qty</th>
+                                <th>Total</th>                              
+                              </tr>
+                            </thead>
+                            <tbody id="cart">
+                              
+                            </tbody>
+                          </table>
+                          </div>
+                  </li>
+                </ul>
+          </li>
+          <li>
+            <a href="" class="dropdown-toggle" data-toggle="dropdown">
+              <span class="glyphicon glyphicon-user dropdown-toggle"></span> Your Account
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="http://localhost:9999/users/profil">Edit Profile</a>
+              </li>
+              <li>
+                <a href="http://localhost:9999/logout" id="logout">Logout</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row" id="edit_form">
+            
+    </div>
+  </div><br><br>
+
+  <footer class="container-fluid text-center">
+    <p>Tamiya-Bi Copyright</p>
+    <form class="form-inline">Get deals:
+      <input type="email" class="form-control" size="50" placeholder="Email Address">
+      <button type="button" class="btn btn-danger">Sign Up</button>
+    </form>
+  </footer>
+
+  
+  <script src="/user_even.js"></script>
+ <script>
+  let idp = window.location.href.split('=')
+  let cob = idp[1] 
+  console.log(cob);
+  let petc = fetch(`http://localhost:9999/users/${cob}`);
+
+petc.then(function (res) {
+  return res.json()
+}).then(result => {
+  result.map(dat => {
+    $('#edit_form').append(
+      `
+      <form id="form" class="form-horizontal">
+                <div class="form-group">
+                  <label class="control-label col-sm-2" for="produk">Username:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="username" value="${dat.username}">
+                  </div>
+                </div>
+                <div class="form-group"> 
+                    <label class="control-label col-sm-2" for="password">Password:</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" name="password" value="${dat.password}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="email">Email:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="email" value="${dat.email}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="phone">Phone:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="phone" value="${dat.phone}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="address">Address</label>
+                    <div class="col-sm-10">
+                       <textarea class="form-control" id="address" rows="3">${dat.address}</textarea>
+                    </div>
+                </div>
+                </div>               
+                <div class="form-group"> 
+                  <div class="col-sm-offset-2 col-sm-10" align='right'>
+                    <button type="submit" class="btn btn-info">Update</button>
+                  </div>
+                </div>
+              </form>`
+    )
+    $("#form").submit(e => {
+            let data = $("#form").serializeArray();
+            $.ajax({
+                method: "PUT",
+                url: `http://localhost:9999/users/update/${dat.id}`,
+                data: data,
+                success: function (result) {
+                  alert ('Profil berhasil di Update')
+                    window.location.href='http://localhost:9999/home'
+                }
+            })
+            e.preventDefault();
+        })
+  })
+})
+ </script> 
+</body>
+
+</html>

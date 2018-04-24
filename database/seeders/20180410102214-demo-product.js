@@ -8,10 +8,10 @@ module.exports = {
       const products = [];
       for (let i = 0; i < 10; i++) {
         let product = {
-          name: chance.name(),
+          name: chance.word(),
           description: chance.sentence(),
-          price: chance.floating({fixed: 2}),
-          stock: chance.integer({min:0, max: 999999})
+          price: chance.integer({min: 10000, max: 100000}), 
+          stock: chance.integer({min:0, max: 100})
         }
         products.push(product);
       } 
@@ -19,12 +19,8 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.bulkDelete('Person', null, {});
-    */
+    
+      return queryInterface.bulkDelete('products', null, {});
+    
   }
 };

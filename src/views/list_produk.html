@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Tamiya-Bi</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+    /* Remove the navbar's default rounded borders and increase the bottom margin */
+
+    .navbar {
+      margin-bottom: 50px;
+      border-radius: 0;
+    }
+
+    /* Remove the jumbotron's default bottom margin */
+
+    .jumbotron {
+      margin-bottom: 0;
+    }
+
+    /* Add a gray background color and some padding to the footer */
+
+    footer {
+      background-color: #c1a6ff;
+      padding: 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="jumbotron">
+    <div class="container text-center">
+      <h1>Tamiya-Bi</h1>
+      <p>Lets get fun with your mini supercar</p>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li class="active">
+            <a href="">Home</a>
+          </li>
+          <li>
+            <a href="http://localhost:9999/admin/products">Products</a>
+          </li>
+          <li>
+            <a href="">Contact</a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+           <li>
+            <a href="" class="dropdown-toggle" data-toggle="dropdown">
+              <span class="glyphicon glyphicon-user dropdown-toggle"></span> Your Account
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="http://localhost:9999/users/profil">Edit Profile</a>
+              </li>
+              <li>
+                <a href="http://localhost:9999/logout" id="logout">Logout</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="container">
+    <div class="row">
+      <a href="http://localhost:9999/admin/products/form">
+      <button class="btn btn-primary"> Add New Product</button></a>
+      <table class="table table-hover">
+        <thead>
+
+          <tr>
+            <th></th>
+            <th>Name products</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="list">
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <br>
+  <br>
+
+  <footer class="container-fluid text-center">
+    <p>Tamiya-Bi Copyright</p>
+    <form class="form-inline">Get deals:
+      <input type="email" class="form-control" size="50" placeholder="Email Address">
+      <button type="button" class="btn btn-danger">Sign Up</button>
+    </form>
+  </footer>
+
+
+  <script>
+    let myFetch = fetch('http://localhost:9999/products');
+
+    myFetch.then(function (res) {
+      return res.json()
+    }).then(result => {
+      result.map(dat => {
+        $('#list').append(
+          `
+            <tr id=row${dat.id}>
+                <td><input class='id' type="hidden" value="${dat.id}" ></td>
+                <td><a href="#" class="active" name="name">${dat.name}</a></td>
+                <td>Rp. ${dat.price}</td>
+                <td>${dat.stock}</td>
+                <td> <button class="btn btn-warning" onclick=edit(${dat.id})> Edit</button> | <button class="btn btn-warning" onclick=hapus(${dat.id})> Hapus</button></td>
+              </tr>
+            `
+        )
+      })
+    })
+    function hapus(params) {
+      if (params) 
+        $.ajax({
+          type: 'DELETE',
+          url: `http://localhost:9999/products/delete/${params}`,
+         
+          success: function (response) {
+            if (response) {
+              window.location=`http://localhost:9999/admin/products`
+              alert('data berhasil dihapus')
+              
+            } else {
+              alert('gagal dihapus !')
+            }
+
+          }
+        });
+      }
+
+function edit(params) {
+              window.location=`http://localhost:9999/admin/products/edit/?id=${params}`      
+      }
+  </script>
+
+</body>
+
+</html>

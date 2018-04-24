@@ -6,10 +6,11 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     address: DataTypes.TEXT,
     phone: DataTypes.STRING,
-    role: DataTypes.STRING
+    role: DataTypes.STRING,
+    token:DataTypes.STRING
   }, {});
   user.associate = function(models) {
-    // associations can be defined here
+    user.hasMany(models.orders, {foreignKey:'id', targetKey:'id_user'});
   };
   return user;
 };

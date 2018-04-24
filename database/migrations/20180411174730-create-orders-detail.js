@@ -17,7 +17,7 @@ module.exports = {
       price: {
         type: Sequelize.FLOAT
       },
-      stock: {
+      qty: {
         type: Sequelize.INTEGER
       },
       createdAt: {
